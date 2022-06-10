@@ -14,7 +14,7 @@ const CodePushOptions = {
 const App = () => {
   return (
     <View>
-      <Text>Hahaha</Text>
+      <Text>Coba</Text>
     </View>
   );
 };
