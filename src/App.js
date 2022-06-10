@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import CodePush from 'react-native-code-push';
