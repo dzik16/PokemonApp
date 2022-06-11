@@ -4,6 +4,7 @@ import SuksesScreen from '../Components/SuksesScreen';
 import HomeScreen from '../screens/HomeScreen/index';
 import Splash from './SplashScreen/index';
 import DetailScreen from './DetailScreen/index';
+import PokeBagScreen from './PokeBagScreen';
 
 export {
   LoginScreen,
@@ -12,4 +13,5 @@ export {
   HomeScreen,
   Splash,
   DetailScreen,
+  PokeBagScreen,
 };

@@ -1,17 +1,22 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+/* eslint-disable react/prop-types */
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
 
-const HomeHeader = (props) => {
-  const userId = props.userId
+const HomeHeader = props => {
+  const userId = props.userId;
   console.log('User Id Header', userId);
   return (
-    <TouchableOpacity style={styles.wrapper} onPress={() => props.navigation.navigate('PokeBag', {userId: userId})}>
+    <TouchableOpacity
+      style={styles.wrapper}
+      onPress={() =>
+        props.navigation.navigate('PokeBagScreen', {userId: userId})
+      }>
       <Text style={styles.btnText}>PokeBag</Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
-export default HomeHeader
+export default HomeHeader;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -20,11 +25,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#e16c2c',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 15
+    borderRadius: 15,
   },
   btnText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 15
-  }
-})
+    fontSize: 15,
+  },
+});
