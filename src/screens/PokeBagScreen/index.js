@@ -87,7 +87,7 @@ const PokeBag = props => {
           columnWrapperStyle={{flex: 1, justifyContent: 'space-between'}}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={() => RemovePokemon(key)}>
+            <TouchableOpacity onPress={() => RemovePokemon()}>
               <PokebagCard
                 pokemonData={pokebag[item]}
                 userId={userId}
