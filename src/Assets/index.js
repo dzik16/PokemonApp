@@ -4,10 +4,8 @@ import SuccessAnim from './animations/success.json';
 import LoginImage from './images/login.png';
 import RegisterImage from './images/register.png';
 import SuccessImage from './images/success.png';
-import AnalyticsImage from './images/analytics.png'
-import CrashlyticImage from './images/crashlytic.png'
-import LogoutImage from './images/logout.png'
-import MapsImage from './images/maps.png'
+import LogoutImage from './images/logout.png';
+
 
 import IconName from './icons/name.png';
 import IconEmail from './icons/email.png';
@@ -22,10 +20,7 @@ export {
   LoginImage,
   RegisterImage,
   SuccessImage,
-  AnalyticsImage,
-  CrashlyticImage,
   LogoutImage,
-  MapsImage,
   IconName,
   IconEmail,
   IconPassword,
