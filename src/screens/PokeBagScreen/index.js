@@ -11,8 +11,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import database from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
-import {useIsFocused} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import ScreenStatusBar from '../../Components/ScreenStatusBar';
 import {PokebagCard} from '../../Components/Card';
 import {BackgroundCatch, IconBack} from '../../Assets';
