@@ -7,6 +7,7 @@ import {
   HomeScreen,
   SuksesScreen,
   Splash,
+  DetailScreen,
 } from '../screens/index';
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +38,11 @@ const Router = () => {
       <Stack.Screen
         name="SuksesScreen"
         component={SuksesScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailScreen"
+        component={DetailScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

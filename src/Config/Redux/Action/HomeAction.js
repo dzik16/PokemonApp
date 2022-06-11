@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {GET_DATA} from '../Types';
-import {baseURL} from '../../Service';
+import {baseURL} from '../../Api';
 import { loading, refresh } from './GlobalAction';
 
 export const getDataPokemon = data => ({
