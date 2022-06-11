@@ -26,7 +26,7 @@ function Splash() {
         <LottieView source={SplashAnim} autoPlay loop />
       </View>
       <View style={styles.judul}>
-        <Text style={styles.txtjudul}>MAPS-APP</Text>
+        <Text style={styles.txtjudul}>POKEMON-APP</Text>
       </View>
       <View style={styles.containerTxt}>
         <Text style={styles.txt}>By M. Dzikri Alfarisyi</Text>

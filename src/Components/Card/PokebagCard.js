@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
 import {StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
+import {Color} from '../../utils/color';
 
 const PokebagCard = props => {
   return (
-    <TouchableOpacity style={styles.wrapper} onPress={props.onPress}>
+    <TouchableOpacity
+      style={[styles.wrapper, styles.shadowProp]}
+      onPress={props.onPress}>
       <Image
         source={{uri: props.pokemonData.pokemonImg}}
         style={{width: 100, height: 100}}
@@ -18,9 +21,9 @@ export default PokebagCard;
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: 170,
+    width: 150,
     height: 150,
-    backgroundColor: '#b0e46a',
+    backgroundColor: Color.BACKGROUND_MAIN,
     marginBottom: 15,
     borderRadius: 15,
     padding: 15,
@@ -32,5 +35,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     textTransform: 'capitalize',
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 3,
   },
 });
