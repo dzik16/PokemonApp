@@ -28,23 +28,16 @@ const LoginScreen = () => {
   const onLoginRDB = values => {
     try {
       database()
-        // Pilih file users
         .ref('/users/')
         .orderByChild('emailId')
-        // sama dengan email
         .equalTo(values.email)
-        // setiap data yang kita terima kita eksekusi
         .once('value')
-        // Jika success maka
         .then(async snapshot => {
-          // Jika value snapshot kosong
           if (snapshot.val() == null) {
             Alert.alert('Invalid Email Id');
             return false;
           }
-          // user data diisi oleh object value snapshot
           let userData = Object.values(snapshot.val())[0];
-          // Jika password tidak sama
           if (userData?.password != values.password) {
             Alert.alert('Error', 'Invalid Password!');
             return false;
@@ -52,7 +45,6 @@ const LoginScreen = () => {
           console.log('User data: ', userData);
           navigation.replace('HomeScreen', {userData: userData});
         });
-      // Jika error maka alert error
     } catch (error) {
       Alert.alert('Error', 'Not Found User');
     }

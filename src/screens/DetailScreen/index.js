@@ -9,13 +9,18 @@ import {
   TouchableOpacity,
   Animated,
   Easing,
+  Image,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {BackgroundCatch} from '../../Assets';
+import {useIsFocused} from '@react-navigation/native';
+import ScreenStatusBar from '../../Components/ScreenStatusBar';
+import {BackgroundCatch, IconBack} from '../../Assets';
 import database from '@react-native-firebase/database';
+import {Color} from '../../utils/color';
 
-const DetailScreen = ({route}) => {
+const DetailScreen = ({navigation, route}) => {
+  const focus = useIsFocused();
   const {userId} = route.params;
 
   const [type, setType] = useState([]);
@@ -118,8 +123,14 @@ const DetailScreen = ({route}) => {
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: '#7fad71'}}>
+    <View style={{flex: 1, backgroundColor: Color.PRIMARY_MAIN_COLOR}}>
+      <ScreenStatusBar status={focus} color={Color.SECOND_MAIN_COLOR} />
       <ImageBackground source={BackgroundCatch} style={styles.detailTop}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={[styles.imgBack, styles.shadowProp]}>
+          <Image source={IconBack} style={styles.headerIcon} />
+        </TouchableOpacity>
         <Animated.Image
           style={[styles.imageDetail, {transform: [{rotate}]}]}
           source={{
@@ -128,22 +139,18 @@ const DetailScreen = ({route}) => {
           }}
         />
       </ImageBackground>
-      <View style={styles.pokemonInfo}>
-        <Text
-          style={{
-            color: '#000',
-            fontWeight: 'bold',
-            fontSize: 20,
-            marginBottom: 5,
-            textTransform: 'capitalize',
-          }}>
-          {pokemonDetail.name}
-        </Text>
+      <Text style={styles.name}>{pokemonDetail.name}</Text>
+      <View style={[styles.pokemonInfo, styles.shadowProp]}>
         <View style={{flexDirection: 'row'}}>
           <View style={{marginRight: 30}}>
             <Text style={styles.textLeft}>Height</Text>
             <Text style={styles.textLeft}>Weight</Text>
             <Text style={styles.textLeft}>Species</Text>
+          </View>
+          <View style={{marginRight: 30}}>
+            <Text style={styles.textLeft}> : </Text>
+            <Text style={styles.textLeft}> : </Text>
+            <Text style={styles.textLeft}> : </Text>
           </View>
           <View>
             <Text style={styles.textRight}>{pokemonDetail.height}</Text>
@@ -164,12 +171,22 @@ const DetailScreen = ({route}) => {
           data={ability}
           renderItem={renderAbility}
         />
-        {disableCatch ? null : (
-          <TouchableOpacity onPress={cacthPokemon} style={styles.catchButton}>
-            <Text style={{color: '#fff', fontWeight: 'bold'}}>Cacth</Text>
-          </TouchableOpacity>
-        )}
       </View>
+      {disableCatch ? null : (
+        <TouchableOpacity
+          onPress={cacthPokemon}
+          style={[styles.catchButton, styles.shadowProp]}>
+          <Text
+            style={{
+              color: '#fff',
+              fontWeight: 'bold',
+              fontSize: 25,
+              alignSelf: 'center',
+            }}>
+            Cacth
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -182,11 +199,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pokemonInfo: {
-    backgroundColor: '#b0e46a',
+    backgroundColor: Color.BACKGROUND_MAIN,
     padding: 12,
     borderRadius: 10,
-    marginTop: 15,
+    marginTop: 30,
     marginHorizontal: 15,
+    marginBottom: 45,
   },
   textLeft: {
     color: '#000',
@@ -198,19 +216,40 @@ const styles = StyleSheet.create({
   },
   title: {fontWeight: 'bold', fontSize: 20, color: '#000', marginTop: 10},
   catchButton: {
-    width: 80,
-    height: 35,
-    backgroundColor: '#e16c2c',
-    position: 'absolute',
-    top: 15,
-    right: 15,
+    width: '70%',
+    height: 45,
+    backgroundColor: Color.BUTTON_AUTH,
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
   },
   imageDetail: {
     width: 230,
     height: 230,
-    marginTop: 65,
+    marginTop: 20,
+  },
+  headerIcon: {
+    height: 30,
+    width: 30,
+  },
+  imgBack: {
+    paddingRight: '80%',
+    paddingTop: 5,
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  name: {
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: 5,
+    textTransform: 'capitalize',
+    alignSelf: 'center',
+    paddingTop: 10,
   },
 });

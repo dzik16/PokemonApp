@@ -7,13 +7,20 @@ import {
   ImageBackground,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import database from '@react-native-firebase/database';
+import {useNavigation} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import ScreenStatusBar from '../../Components/ScreenStatusBar';
 import {PokebagCard} from '../../Components/Card';
-import {BackgroundCatch} from '../../Assets';
+import {BackgroundCatch, IconBack} from '../../Assets';
+import {Color} from '../../utils/color';
 
 const PokeBag = props => {
+  const focus = useIsFocused();
+  const navigation = useNavigation();
   const {userId} = props.route.params;
   console.log('User Id Poke bag', userId);
 
@@ -77,7 +84,15 @@ const PokeBag = props => {
 
   return (
     <ImageBackground source={BackgroundCatch} style={styles.container}>
-      <Text style={styles.titleScreen}>PokeBag</Text>
+      <ScreenStatusBar status={focus} color={Color.SECOND_MAIN_COLOR} />
+      <View>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={[styles.imgBack, styles.shadowProp]}>
+          <Image source={IconBack} style={styles.headerIcon} />
+        </TouchableOpacity>
+        <Text style={styles.titleScreen}>PokeBag</Text>
+      </View>
       {pokebag.length === 0 ? (
         <Text>you dont have pokemon in your pokebag</Text>
       ) : (
@@ -144,5 +159,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginBottom: 15,
+  },
+  headerIcon: {
+    height: 30,
+    width: 30,
+  },
+  imgBack: {
+    paddingRight: '80%',
+    paddingTop: 5,
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 3,
   },
 });

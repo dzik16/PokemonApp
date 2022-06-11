@@ -17,12 +17,15 @@ import {
   GetDataPokemonDetail,
 } from '../../Config/Redux/Action';
 import {useSelector, useDispatch} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import ScreenStatusBar from '../../Components/ScreenStatusBar';
 import {PokeBall, BackgroundCatch} from '../../Assets';
 import {HomeHeader} from '../../Components/Headers';
 import Loading from '../../Components/Loading';
-// import {refresh} from '../../Redux/Action/GlobalAction';
+import {Color} from '../../utils/color';
 
 const HomeScreen = ({navigation, route}) => {
+  const focus = useIsFocused();
   const {userData} = route.params;
   const dispatch = useDispatch();
   const [halaman, setHalaman] = useState(1);
@@ -44,11 +47,6 @@ const HomeScreen = ({navigation, route}) => {
     }
   }, [dispatch, halaman, pokeData.next]);
 
-  // const Refresh = () => {
-  //   dispatch(refresh(true));
-  //   dispatch(GetDataPokemon());
-  // };
-
   const previousPokemon = useCallback(() => {
     if (pokeData.previous === null) {
       alert('Tidak ada halaman lagi');
@@ -65,17 +63,17 @@ const HomeScreen = ({navigation, route}) => {
 
   const renderItem = ({item}) => (
     <TouchableOpacity
-      style={styles.pokemon}
+      style={[styles.pokemon, styles.shadowProp]}
       onPress={() =>
         dispatch(GetDataPokemonDetail(item.url, navigation, userData.id))
       }>
       <Image
         source={PokeBall}
-        style={{width: 30, height: 30, marginHorizontal: 15}}
+        style={{width: 30, height: 30, marginHorizontal: 10}}
       />
       <Text
         style={{
-          color: '#fff',
+          color: Color.BLACK,
           fontWeight: 'bold',
           fontSize: 15,
           textTransform: 'capitalize',
@@ -88,6 +86,7 @@ const HomeScreen = ({navigation, route}) => {
   if (!loading) {
     return (
       <ImageBackground source={BackgroundCatch} style={styles.container}>
+        <ScreenStatusBar status={focus} color={Color.SECOND_MAIN_COLOR} />
         <StatusBar backgroundColor={'#79c9f9'} />
         <HomeHeader navigation={navigation} userId={userData.id} />
         <FlatList
@@ -101,7 +100,10 @@ const HomeScreen = ({navigation, route}) => {
         <View style={styles.buttons}>
           <TouchableOpacity
             onPress={() => previousPokemon()}
-            style={[styles.btnPagination, {backgroundColor: '#e16c2c'}]}>
+            style={[
+              styles.btnPagination,
+              {backgroundColor: Color.BUTTON_AUTH},
+            ]}>
             <Text style={styles.btnText}>Previous</Text>
           </TouchableOpacity>
           <Text
@@ -115,7 +117,10 @@ const HomeScreen = ({navigation, route}) => {
           </Text>
           <TouchableOpacity
             onPress={() => nextPokemon()}
-            style={[styles.btnPagination, {backgroundColor: '#97cce2'}]}>
+            style={[
+              styles.btnPagination,
+              {backgroundColor: Color.BUTTON_AUTH},
+            ]}>
             <Text style={styles.btnText}>Next</Text>
           </TouchableOpacity>
         </View>
@@ -138,6 +143,7 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingBottom: 10,
   },
   btnPagination: {
     width: 80,
@@ -153,7 +159,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   pokemon: {
-    backgroundColor: '#b1736d',
+    backgroundColor: Color.BACKGROUND_DETAIL,
     width: '45%',
     height: 50,
     marginTop: 10,
@@ -161,5 +167,12 @@ const styles = StyleSheet.create({
     padding: 7,
     alignItems: 'center',
     borderRadius: 5,
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {width: 2, height: 2},
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 3,
   },
 });
