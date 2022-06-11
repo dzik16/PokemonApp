@@ -2,6 +2,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import CodePush from 'react-native-code-push';
+import Router from './Router/index';
 
 const CodePushOptions = {
   checkFrequency: CodePush.CheckFrequency.ON_APP_START,
@@ -13,11 +14,7 @@ const CodePushOptions = {
 };
 
 const App = () => {
-  return (
-    <View>
-      <Text>Coba</Text>
-    </View>
-  );
+  return <Router />;
 };
 
 export default CodePush(CodePushOptions)(App);

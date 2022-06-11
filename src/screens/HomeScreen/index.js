@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const index = () => {
-  const nyoba = 0;
+const HomeScreen = () => {
   return (
     <View>
       <Text>index</Text>
@@ -11,6 +9,6 @@ const index = () => {
   );
 };
 
-export default index;
+export default HomeScreen;
 
 const styles = StyleSheet.create({});
