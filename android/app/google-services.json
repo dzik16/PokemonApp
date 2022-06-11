@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "333328953737",
+    "firebase_url": "https://pokemonapp-d85a8-default-rtdb.firebaseio.com",
     "project_id": "pokemonapp-d85a8",
     "storage_bucket": "pokemonapp-d85a8.appspot.com"
   },

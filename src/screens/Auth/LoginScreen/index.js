@@ -4,10 +4,14 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import {Formik} from 'formik';
+import * as yup from 'yup';
+
 import ScreenStatusBar from '../../../Components/ScreenStatusBar';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {IconEmail, IconPassword} from '../../../Assets';
@@ -19,131 +23,122 @@ import FormInput from '../../../Components/FormInput';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
   const focus = useIsFocused();
 
-  // Set an initializing state whilst Firebase connects
-  // const [initializing, setInitializing] = useState(true);
-  // const [infoUser, setInfoUser] = useState();
-
-  // function onAuthStateChanged(infoUser) {
-  //   setInfoUser(infoUser);
-  //   if (initializing) setInitializing(false);
-  // }
-
-  const sendData = () => {
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('Login Success');
-        navigation.replace('HomeScreen');
-      })
-      .catch(error => {
-        if (error.code === 'auth/invalid-email') {
-          alert('email address is invalid!');
-        }
-        console.error(error);
-      });
-  };
-
-  const formChecker = () => {
-    const emailRegEx = /[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-z]/;
-    const emailStatus = emailRegEx.test(email); // Boolean
-
-    if (email.length === 0 && password.length === 0) {
-      alert('From cant be empty!');
-    } else if (emailStatus && password.length >= 8) {
-      console.log('Success');
-      sendData();
-    } else {
-      alert('Invalid Form!');
+  const onLoginRDB = values => {
+    try {
+      database()
+        // Pilih file users
+        .ref('/users/')
+        .orderByChild('emailId')
+        // sama dengan email
+        .equalTo(values.email)
+        // setiap data yang kita terima kita eksekusi
+        .once('value')
+        // Jika success maka
+        .then(async snapshot => {
+          // Jika value snapshot kosong
+          if (snapshot.val() == null) {
+            Alert.alert('Invalid Email Id');
+            return false;
+          }
+          // user data diisi oleh object value snapshot
+          let userData = Object.values(snapshot.val())[0];
+          // Jika password tidak sama
+          if (userData?.password != values.password) {
+            Alert.alert('Error', 'Invalid Password!');
+            return false;
+          }
+          console.log('User data: ', userData);
+          navigation.replace('HomeScreen', {userData: userData});
+        });
+      // Jika error maka alert error
+    } catch (error) {
+      Alert.alert('Error', 'Not Found User');
     }
   };
+  const loginValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email('Please enter valid email')
+      .required('Email Address is Required'),
+    password: yup
+      .string()
+      .min(8, ({min}) => `Password must be at least ${min} characters`)
+      .required('Password is required'),
+  });
 
-  // useEffect(() => {
-  //   try {
-  //     GoogleSignin.configure({
-  //       webClientId:
-  //         '333328953737-ba27favfbfboptbhvjl5of792btbc97e.apps.googleusercontent.com',
-  //     });
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
-
-  // async function onGoogleButtonPress() {
-  //   // Get the users ID token
-  //   const {idToken} = await GoogleSignin.signIn();
-
-  //   // Create a Google credential with the token
-  //   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-  //   // Sign-in the user with the credential
-  //   return auth().signInWithCredential(googleCredential);
-  // }
-
-  // if (!infoUser) {
   return (
     <SafeAreaView style={styles.container}>
       <ScreenStatusBar status={focus} color={Color.SECOND_MAIN_COLOR} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header />
+      <Formik
+        validationSchema={loginValidationSchema}
+        initialValues={{email: '', password: ''}}
+        onSubmit={values => onLoginRDB(values)}>
+        {({handleChange, handleBlur, handleSubmit, values, errors}) => (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Header />
 
-        <Title />
+            <Title />
 
-        <FormInput
-          icon={IconEmail}
-          placeholder="Email"
-          value={email}
-          onChangeText={text => setEmail(text)}
-          keyboardType="email-address"
-        />
+            <FormInput
+              icon={IconEmail}
+              placeholder="Email"
+              value={values.email}
+              onBlur={handleBlur('email')}
+              onChangeText={handleChange('email')}
+              keyboardType="email-address"
+            />
+            {errors.email && (
+              <Text style={styles.errorText}>{errors.email}</Text>
+            )}
 
-        <FormInput
-          icon={IconPassword}
-          placeholder="Password"
-          value={password}
-          onChangeText={text => setPassword(text)}
-          secureTextEntry
-        />
+            <FormInput
+              icon={IconPassword}
+              placeholder="Password"
+              onBlur={handleBlur('password')}
+              value={values.password}
+              onChangeText={handleChange('password')}
+              secureTextEntry
+            />
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
 
-        <View style={styles.containerRegist}>
-          <View>
-            <Text style={{fontSize: 15, color: Color.WHITE}}>
-              Dont have an account?
-            </Text>
-          </View>
-          <View>
+            <View style={styles.containerRegist}>
+              <View>
+                <Text style={{fontSize: 15, color: Color.WHITE}}>
+                  Dont have an account?
+                </Text>
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('RegisterScreen')}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: Color.WHITE,
+                      fontWeight: 'bold',
+                    }}>
+                    Sign Up {'>'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
             <TouchableOpacity
-              onPress={() => navigation.navigate('RegisterScreen')}>
+              style={[styles.btnLogin, styles.shadowProp]}
+              onPress={handleSubmit}>
               <Text
-                style={{
-                  fontSize: 15,
-                  color: Color.WHITE,
-                  fontWeight: 'bold',
-                }}>
-                Sign Up {'>'}
+                style={{fontSize: 15, color: Color.WHITE, fontWeight: 'bold'}}>
+                Login
               </Text>
             </TouchableOpacity>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          style={[styles.btnLogin, styles.shadowProp]}
-          onPress={() => formChecker()}>
-          <Text style={{fontSize: 15, color: Color.WHITE, fontWeight: 'bold'}}>
-            Login
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+          </ScrollView>
+        )}
+      </Formik>
     </SafeAreaView>
   );
-  // }
-
-  // return <View>{navigation.replace('HomeScreen')}</View>;
 };
 
 export default LoginScreen;
