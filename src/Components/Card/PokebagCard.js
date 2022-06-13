@@ -21,8 +21,8 @@ export default PokebagCard;
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     backgroundColor: Color.BACKGROUND_MAIN,
     marginBottom: 15,
     borderRadius: 15,

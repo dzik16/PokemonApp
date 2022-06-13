@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.BACKGROUND_MAIN,
     padding: 12,
     borderRadius: 10,
-    marginTop: 30,
+    marginTop: 10,
     marginHorizontal: 15,
-    marginBottom: 45,
+    marginBottom: 25,
   },
   textLeft: {
     color: '#000',
@@ -224,8 +224,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   imageDetail: {
-    width: 230,
-    height: 230,
+    width: 200,
+    height: 200,
     marginTop: 20,
   },
   headerIcon: {
